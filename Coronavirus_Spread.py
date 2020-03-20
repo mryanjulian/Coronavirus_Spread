@@ -8,7 +8,7 @@
 
 # ## Packages
 
-# In[21]:
+# In[1]:
 
 
 import pandas as pd
@@ -22,7 +22,7 @@ import imageio
 # 
 # We use pandas to load the csv files containing COVID-19 time series data.  These files contain the numbers of confirmed cases, recoveries, and deaths due to coronavirus organized according to location and date.  The location data is typically resolved down to the province or country level, but in some regions such as the US, it is given by county.  Each location also comes with latitude and longitude values that are useful for displaying this data on our map.
 
-# In[22]:
+# In[2]:
 
 
 HEADER = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/'
@@ -36,7 +36,7 @@ covid_death = pd.read_csv(HEADER+'time_series_19-covid-Deaths.csv')
 # 
 # Here we prepare a png image for each date currently in the dataset, and save these in a folder for later retrieval.  On top of a background world map, we display blue circles representing active cases at each location (confirmed - recovered - deaths) and red circles representing the total number of deaths at each location.  The size of the circles corresponds to the number of cases as indicated in the legend.
 
-# In[23]:
+# In[7]:
 
 
 i = 0
@@ -47,14 +47,14 @@ for date in covid_conf.keys()[4:]:
     earth = Basemap(ax=ax)
     earth.drawcoastlines(color='#555555', linewidth=1)
     ax.scatter(covid_conf['Long'], covid_conf['Lat'], alpha = 0.2,
-                    s = covid_conf[date]-covid_rec[date]-covid_death[date],c='blue')
+                    s = (covid_conf[date]-covid_rec[date]-covid_death[date])/2,c='blue')
     ax.scatter(covid_conf['Long'], covid_conf['Lat'], alpha = 0.2, 
-              s = covid_death[date], c='red')
+              s = covid_death[date]/2, c='red')
     ax.set_xlabel("COVID19 cases as of "+m+'/'+d+'/'+y)
-    plt.scatter([],[], s=10, c='blue', alpha = 0.2, label='10 active cases')
-    plt.scatter([],[], s=100, c='blue', alpha = 0.2, label='100 active cases')
-    plt.scatter([],[], s=10, c='red', alpha = 0.2, label='10 deaths')
-    plt.scatter([],[], s=100, c='red', alpha = 0.2, label='100 deaths')
+    plt.scatter([],[], s=50, c='blue', alpha = 0.2, label='100 active cases')
+    plt.scatter([],[], s=250, c='blue', alpha = 0.2, label='500 active cases')
+    plt.scatter([],[], s=50, c='red', alpha = 0.2, label='100 deaths')
+    plt.scatter([],[], s=250, c='red', alpha = 0.2, label='500 deaths')
     plt.legend(loc='lower left')
     i += 1
     filename = 'frame'+'0'*(3-len(str(i)))+str(i)+'.png'
@@ -66,7 +66,7 @@ for date in covid_conf.keys()[4:]:
 # 
 # We use the imageio package to construct a gif from these frames.  The final frame is added to the end 30 extra times to give the viewer a few seconds to inspect the most recent map before the gif repeats.
 
-# In[24]:
+# In[8]:
 
 
 images = []
