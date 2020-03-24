@@ -58,7 +58,7 @@ for date in covid_conf.keys()[4:]:
     plt.legend(loc='lower left')
     i += 1
     filename = 'frame'+'0'*(3-len(str(i)))+str(i)+'.png'
-    plt.savefig('png_images/'+filename,dpi=72)
+    plt.savefig('png_images/'+filename,dpi=96)
     plt.close()
 
 
